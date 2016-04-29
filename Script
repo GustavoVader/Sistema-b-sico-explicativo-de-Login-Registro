@@ -1,20 +1,20 @@
-/*Eu escolhi fazer esse sistema por Filterscript por pura opção.
-Então, eu vou partir do presuposto que você que esta lendo este turorial saiba o mínimo de Pawn
-(Arrays, Enums, stocks, etc) e não vou explicar muito detalhadamente sobre isso.*/
+/*Eu escolhi fazer esse sistema por Filterscript por pura opcao.
+Entao, eu vou partir do presuposto que voce que esta lendo este turorial saiba o minimo de Pawn
+(Arrays, Enums, stocks, etc) e nao vou explicar muito detalhadamente sobre isso.*/
 
-#define FILTERSCRIPT //Isto aqui define que o script abaixo é uma filterscript.
+#define FILTERSCRIPT
 
 #include <a_samp>
 #include <DOF2>
 
-#define DIALOG_LOGIN 1      /*Esses defines servirão para quando identificarmos
-#define DIALOG_REGISTER 2   os nossos dialogs*/
+#define DIALOG_LOGIN 1      /*Esses defines servirao para quando identificarmos os nossos dialogs*/
+#define DIALOG_REGISTER 2   
 #define DIALOG_cREGISTER 3
 #define DIALOG_ERROR 4
 
 #if defined FILTERSCRIPT
 
-/*KickWithMessage é uma stock que manda uma mensagem ao usuário antes de kika-lo, assim justificando o motivo de seu kick*/ 
+/*KickWithMessage e uma stock que manda uma mensagem ao usuario antes de kika-lo, assim justificando o motivo de seu kick*/ 
 forward KickPublic(playerid);
 public KickPublic(playerid){Kick(playerid);}
 
@@ -25,28 +25,28 @@ stock KickWithMessage(playerid, message[])
 }
 
 
-stock Registro(playerid)  /*Neste stock, definimos que haverá uma função chamada Registro(playerid) que será o nome do arquivo que manterá todas as informações do jogador.*/
+stock Registro(playerid)  /*Neste stock, definimos que havera uma funcao chamada Registro(playerid) que sera o nome do arquivo que mantera todas as informacoes do jogador.*/
 {
-	new Arq[64], pName[MAX_PLAYER_NAME]; //Aqui definimos duas variáveis: "Arq" para salvar o nome do arquivo que será gerado e "pName" que será usado para guardar o nome do jogador.
-	GetPlayerName(playerid, pName, sizeof(pName)); //Aqui nós pegamos o nome do jogador e guardamos na variável "pName"
-	format(Arq, sizeof(Arq), USER_FILE_PATH, pName); //Aqui formatamos a variável "Arq" com o nome do jogador e o seu *caminho*(Onde o arquivo será salvo no seu computador.)
-                                                      Por padrão, ele será salvo em scriptfiles, mas com o arquivo "dof2.inc" que eu disponibilizei para donwload, a pasta
-                                                      será "scriptfiles/registros". Então se você estiver usando o meu "dof2.inc", crie uma pasta chamada "registro" na pasta "scriptfiles". 
-	return Arq; //Aqui nós retornamos o valor de "Arq" para a função "Registro(playerid)"
+	new Arq[64], pName[MAX_PLAYER_NAME]; //Aqui definimos duas variaveis: "Arq" para salvar o nome do arquivo que sera gerado e "pName" que sera usado para guardar o nome do jogador.
+	GetPlayerName(playerid, pName, sizeof(pName)); //Aqui pegamos o nome do jogador e guardamos na variavel "pName"
+	format(Arq, sizeof(Arq), USER_FILE_PATH, pName); //Aqui formatamos a variavel "Arq" com o nome do jogador e o seu *caminho*(Onde o arquivo sera salvo no seu computador.)
+                                                      Por padrao, ele sera salvo em scriptfiles, mas com o arquivo "dof2.inc" que eu disponibilizei para donwload, a pasta
+                                                      sera "scriptfiles/registros". Entao se você estiver usando o meu "dof2.inc", crie uma pasta chamada "registro" na pasta "scriptfiles". 
+	return Arq; //Aqui nós retornamos o valor de "Arq" para a funcao "Registro(playerid)"
 }
 
-enum pInfo{ //Aqui enumeramos algumas informações do jogador.
+enum pInfo{ //Aqui enumeramos algumas informacoes do jogador.
 
 	pSenha[128],
 	pScore
 }
 
-new PlayerInfo[MAX_PLAYERS][pInfo]; //Aqui definimos a função "PlayerInfo" que será usada para carregar as informações do jogador.
+new PlayerInfo[MAX_PLAYERS][pInfo]; //Aqui definimos a funcao "PlayerInfo" que sera usada para carregar as informacoes do jogador.
 
-stock LoadPlayerStats(playerid) //Essa função carrega os dados para o jogador.
+stock LoadPlayerStats(playerid) //Essa funcao carrega os dados para o jogador.
 {
-	PlayerInfo[playerid][pScore] = DOF2_GetInt(Registro(playerid), "pScore"); //Essa função diz: "A variável PlayerInfo[playerid][pScore] deve ter o valor do que está guardado no arquivo Registro(playerid), pScore"
-	SetPlayerScore(playerid, PlayerInfo[playerid][pScore]); //Setamos o score do jogador com o valor que pegamos na ultima função
+	PlayerInfo[playerid][pScore] = DOF2_GetInt(Registro(playerid), "pScore"); //Essa funcao diz: "A variavel PlayerInfo[playerid][pScore] deve ter o valor do que esta guardado no arquivo Registro(playerid), pScore"
+	SetPlayerScore(playerid, PlayerInfo[playerid][pScore]); //Setamos o score do jogador com o valor que pegamos na ultima funcao
 	return 1;
 }
 
@@ -59,21 +59,21 @@ public OnFilterScriptInit()
 
 public OnPlayerConnect(playerid)
 {
-	if(DOF2_FileExists(Registro(playerid))) //Essa função diz: "Se houver um arquivo com o nome do jogador, faça isso"
+	if(DOF2_FileExists(Registro(playerid))) //Essa funcao diz: "Se houver um arquivo com o nome do jogador, faca isso"
 	    {
 	        SendClientMessage(playerid, -1, "Preparando sistema de Login."); //Envia uma mensagem ao jogador.
 	        SendClientMessage(playerid, -1, "Seja bem vindo ao Servidor Teste!"); // ||
 	        SendClientMessage(playerid, -1, "Digite sua senha para efetuar o Login."); // ||
 	        ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Sistema de Login", "Digite sua senha:", "Confirmar", "Sair");
-	        //Aqui definimos uma dilog para o jogador inserir a sua senha para fazer o login no servidor. Mais tarde essa informação será processada.
+	        //Aqui definimos uma dilog para o jogador inserir a sua senha para fazer o login no servidor. Mais tarde essa informacao sera processada.
 	    }
-	else //Essa função diz: "Se não houver um arquivo com o nome do jogador, faça isso"
+	else //Essa funcao diz: "Se nao houver um arquivo com o nome do jogador, faca isso"
 	    {
 	        SendClientMessage(playerid, -1, "Preparando sistema de Registro."); //Envia uma mensagem ao jogador.
 	        SendClientMessage(playerid, -1, "Seja bem vindo ao Servidor Teste!"); // ||
 	        SendClientMessage(playerid, -1, "Digite sua senha para efetuar o Registro."); // ||
 	        ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD, "Sistema de Registro", "Digite sua senha:", "Confirmar", "Sair");
-	        //Nessa função definimos um dialog para o jogador se registrar no servidor.
+	        //Nessa funcao definimos um dialog para o jogador se registrar no servidor.
 	    }
 	return 1;
 }
@@ -84,21 +84,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])// A
 	    {
 	        case DIALOG_REGISTER: //No caso do DIALOG_REGISTER
 	            {
-	                if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por não realizar o registro."); return 1;}
+	                if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por nao realizar o registro."); return 1;}
 	                //Se a resposta for "Sair" ou o jogador apertou "Esc", retorna para ele um kick com a mensagem acima.
-	                if(response) //Se ele responder "Confirmar" ou apertar "Enter", essa função será chamada.
+	                if(response) //Se ele responder "Confirmar" ou apertar "Enter", essa funcao sera chamada.
 	                    {
-	                        if(!strlen(inputtext) || strlen(inputtext) < 6) //A função diz: "Se não for digitado texto ou ele tiver menos que 6 caracteres, faça isso "
+	                        if(!strlen(inputtext) || strlen(inputtext) < 6) //A funcao diz: "Se nao for digitado texto ou ele tiver menos que 6 caracteres, faca isso "
 	                            {
 	                                SendClientMessage(playerid, 0xFF0000FF, "Erro! Digite uma senha de no mínimo 6 digitos.");//Envia uma mensagem para o jogador.
 	                                ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD, "Sistema de Registro", "Digite sua senha:", "Confirmar", "Sair");
-	                                // Mostra novamente o dialog para ele se registrar, já que a senha digitada é inválida.
+	                                // Mostra novamente o dialog para ele se registrar, ja que a senha digitada é invalida.
 	                            }
 	                     }
-							    if(strlen(inputtext) >= 6)//A funão diz: "Se o texto digitado tiver 6 ou mais digitos, faça isso"
+							    if(strlen(inputtext) >= 6)//A funao diz: "Se o texto digitado tiver 6 ou mais digitos, faca isso"
 							        {
 							            SendClientMessage(playerid, -1, "Agora confirme sua senha."); //Envia uma mensagem ao jogador
-							            ShowPlayerDialog(playerid, DIALOG_cREGISTER, DIALOG_STYLE_PASSWORD, "Confirmação de senha", "Confirme sua senha:", "Confirmar", "Sair"); //Mostra este dialog para o jogador confirmar sua senha.
+							            ShowPlayerDialog(playerid, DIALOG_cREGISTER, DIALOG_STYLE_PASSWORD, "Confirmacao de senha", "Confirme sua senha:", "Confirmar", "Sair"); //Mostra este dialog para o jogador confirmar sua senha.
 									        DOF2_CreateFile(Registro(playerid)); //Cria o arquivo com o nome do jogador.
 									        DOF2_SetString(Registro(playerid), "pSenha", inputtext); //Coloca a senha do jogador dentro do arquivo.
 									        DOF2_SetInt(Registro(playerid), "pScore", 0); //Coloca o score do jogador dentro do arquivo.
@@ -107,29 +107,29 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])// A
               }
 			case DIALOG_cREGISTER: //Esta dialog foi criada para checar a senha digitada pelo usuario
 			    {
-			        if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por não realizar a confirmação do registro."); DOF2_RemoveFile(Registro(playerid)); return 1;}
+			        if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por nao realizar a confirmacao do registro."); DOF2_RemoveFile(Registro(playerid)); return 1;}
 			        //Se a resposta for "Sair" ou o jogador apertou "Esc", retorna para ele um kick com a mensagem acima e .
 			        if(response) // Se ele responder a dialog
 			            {
-			                if(!strcmp(DOF2_GetString(Registro(playerid), "pSenha"), inputtext, true)) //Se o que ele digitar for igual a ultima senha, faça isso
+			                if(!strcmp(DOF2_GetString(Registro(playerid), "pSenha"), inputtext, true)) //Se o que ele digitar for igual a ultima senha, faca isso
 			                    {
 			                        SendClientMessage(playerid, -1, "Registro efetuado com sucesso."); //Envia uma mensagem para o jogador
 									            SendClientMessage(playerid, -1, "Você ganhou 10 pontos por concluir o registro."); // ||
 									            DOF2_SetInt(Registro(playerid), "pScore", 10); //Coloca o score do jogador como 10 dentro do arquivo criado.
-									            SpawnPlayer(playerid); //Força o jogador a fazer Spawn
-									            LoadPlayerStats(playerid); //Carrega os dados do jogador segundo nossa função lá em cima.
+									            SpawnPlayer(playerid); //Forca o jogador a fazer Spawn
+									            LoadPlayerStats(playerid); //Carrega os dados do jogador segundo nossa funcao la em cima.
                           }
                   }
-							 else //Se o que ele digitar não for igual ao que foi salvo, faça isso 
+							 else //Se o que ele digitar nao for igual ao que foi salvo, faca isso 
 							    {
 							        SendClientMessage(playerid, 0xFF0000FF, "Erro! Digite corretamente sua senha.");//Manda esta mensagem ao jogador
-							        ShowPlayerDialog(playerid, DIALOG_ERROR, DIALOG_STYLE_MSGBOX, "Erro!", "Você tem certeza que sabe sua senha?", "Sim", "Não");
+							        ShowPlayerDialog(playerid, DIALOG_ERROR, DIALOG_STYLE_MSGBOX, "Erro!", "Você tem certeza que sabe sua senha?", "Sim", "Nao");
 							        //Essa dialog foi criada para que o jogador possa escolher entre re-inserir a senha e trocar a senha salva.
 							    }
 			    }
 			case DIALOG_ERROR: //Definindo os parametros da dialog
 				{
-				    if(!response) // Se ele responder "Não", faça isso
+				    if(!response) // Se ele responder "Nao", faca isso
 				        {
 				            SendClientMessage(playerid, -1, "Digite sua nova senha para se registrar."); //Manda esta mensagem ao jogador
 				            ShowPlayerDialog(playerid, DIALOG_REGISTER, DIALOG_STYLE_PASSWORD, "Sistema de Registro", "Digite sua senha:", "Confirmar", "Sair");
@@ -137,23 +137,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])// A
 				        }
 					if(response) //Se ele reponder "Sim"
 					    {
-					        ShowPlayerDialog(playerid, DIALOG_cREGISTER, DIALOG_STYLE_PASSWORD, "Confirmação de senha", "Confirme sua senha:", "Confirmar", "Sair");
+					        ShowPlayerDialog(playerid, DIALOG_cREGISTER, DIALOG_STYLE_PASSWORD, "Confirmacao de senha", "Confirme sua senha:", "Confirmar", "Sair");
 					        //Vai mostrar o dialog para ele confirmar a senha, ja que ele sabe a mesma.
 					    }
 				}
 			case DIALOG_LOGIN: //Caso for o dialog LOGIN
 			    {
-			        if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por não realizar o login."); return 1;}
-			        //Se o player clicar em "Sair" ou em "Esc", ele será kickado com essa mensagem.
+			        if(!response) {KickWithMessage(playerid, "Você foi desconectado do servidor por nao realizar o login."); return 1;}
+			        //Se o player clicar em "Sair" ou em "Esc", ele sera kickado com essa mensagem.
 			        if(response)//E se ele responder corretamente
 			            {
 			                if(!strcmp(DOF2_GetString(Registro(playerid), "pSenha"), inputtext))//Cheque se o que ele digitou é igual ao que tem salvo no arquivo dele. 
-			                    {   //Se for, será feito isso
+			                    {   //Se for, sera feito isso
 			                        SendClientMessage(playerid, -1, "Login realizado com sucesso"); //Manda esta mensagem ao jogador
-			                        SpawnPlayer(playerid); //Força o spawn do jogador
+			                        SpawnPlayer(playerid); //Forca o spawn do jogador
 			                        LoadPlayerStats(playerid); //Carrega os dados do jogador.
 			                    }
-							else //Se o que ele digitar NÃO for igual ao que tem salvo, faça isso
+							else //Se o que ele digitar NaO for igual ao que tem salvo, faca isso
 							    {
 									  SendClientMessage(playerid, 0xFF0000FF, "Erro! Digite corretamente sua senha para prosseguir."); //Manda esta mensagem ao jogador
 									  ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "Sistema de Login", "Digite sua senha:", "Confirmar", "Sair");
